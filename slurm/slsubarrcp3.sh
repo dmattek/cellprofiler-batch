@@ -9,10 +9,10 @@
 USERHOMEDIR=`eval echo "~$USER"`
 
 # Directory with CellProfiler install 
-CPINSTDIR=$USERHOMEDIR/CellProfiler
+CPINSTDIR=/opt/CellProfiler
 
 # Path to CellProfiler binary
-CPBINPATH=$USERHOMEDIR/.local/bin/cellprofiler
+CPBINPATH=/opt/cellprofiler-batch/singularity/runcp3cont.sh
 
 # Name of the file with commands to execute
 FBATCHLIST=batchlist.txt
