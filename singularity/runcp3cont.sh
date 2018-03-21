@@ -3,7 +3,7 @@
 # Singularity wrapper script
 
 # Location of Singularity image
-IMLOC=/opt/CellProfiler/cp3ubuntu.img
+IMLOC=/opt/local/cellprofiler/cp3ubuntu.img
 
 # List of directories to bind with the image
 BNDDIR="-B /scratch -B /mnt/imaging.data"

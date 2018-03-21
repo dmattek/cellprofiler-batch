@@ -5,7 +5,6 @@ From: ubuntu
 # Container for Singularity
 # CellProfiler 3.0.0
 # 
-# Written by Maciej Dobrzynski 
 
 %help
   This is a container with CellProfiler and required dependencies.
@@ -50,6 +49,21 @@ From: ubuntu
   cd CellProfiler
   git checkout v3.0.0
   pip install --editable .
+
+echo "--- figure.py.old	2018-03-21 18:57:59.954606241 +0100
++++ figure.py	2018-03-21 18:58:37.498606241 +0100
+@@ -524,6 +524,8 @@
+             return
+         available_width, available_height = self.GetClientSize()
+         nbheight = self.navtoolbar.GetSize()[1]
++        if nbheight < 40:
++            nbheight = 40
+         self.navtoolbar.SetPosition((0, 0))
+         self.navtoolbar.SetSize((available_width, nbheight))" > figure.patch
+
+
+patch cellprofiler/gui/figure.py figure.patch
+
 
 %environment
 
