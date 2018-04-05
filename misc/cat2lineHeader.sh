@@ -90,8 +90,12 @@ done
 argfile=$1
 
 # convert end of line 
+# Works in "New file mode" because the "Old file mode" tries to preserve original permissions.
+# Since the script can be used by different users on the same data, permission preservation is not feasible.
+# In the NFM, a new converted file is created. However, this file is then renamed to the original.
 if [ $CONV -eq 1 ]; then
-	dos2unix $argfile
+	dos2unix -n $argfile dos2unix.tmp
+	mv dos2unix.tmp $argfile
 fi
 
 line1=($(sed -n "1s/${FSEP}/ /gp" $argfile))

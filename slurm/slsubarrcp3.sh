@@ -21,7 +21,7 @@ FBATCHLIST=batchlist.txt
 JOBSDIR=slurm.jobs
 
 # Name of the directory to store temporary files
-TMPDIR=/tmp/cp3
+TMPDIR=/tmp
 
 # Name of the directory to store CP output
 OUTDIR=output
@@ -131,6 +131,7 @@ FARRAY=arrayjobs.sh
 
 echo "#!/bin/bash" > $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
+echo "#SBATCH --mem-per-cpu=4096" >> $FARRAY
 echo "#SBATCH -D $currDir" >> $FARRAY
 echo "#SBATCH --output=$JOBSDIR.out/slurm-%A_%a.out" >> $FARRAY
 echo "" >> $FARRAY
