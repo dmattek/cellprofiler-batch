@@ -2,7 +2,6 @@
 
 # Clean SLURM output, job lists, etc. produced with submission scripts
 
-rm -rf slurm.jobs.out 
-rm -rf slurm.jobs
+find . -name "slurm*" -type d -exec rm -r {} +
 rm batchlist.txt
 rm arrayjobs.sh
