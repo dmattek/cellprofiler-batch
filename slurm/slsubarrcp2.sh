@@ -4,6 +4,29 @@
 # Jobs are generated based on h5 file (typically Batch_data.h5) created with CreateBatchFile module of CellProfiler
 # The script should be execute IN the directory with h5 file
 
+usage="Error: insufficient arguments!\n
+This script processes CellProfiler batch h5 file, creates jobs, and submits to SLURM queue\n
+\n
+Usage:
+$(basename "$0") -options H5-batch-file-from-CP\n
+\n
+Possible options:\n
+	-h | --help		Show this help text.\n
+	-t | --test		Test mode: creates all intermediate files without submitting to a queue.\n
+	-c | --test		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
+	-i | --test		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
+	-m | --test		Path to TEMP directory (default /tmp/cp3).\n
+	-o | --test		Directory with CP output.\n"
+	
+E_BADARGS=85
+
+if [ ! -n "$1" ]
+then
+  echo -e $usage 
+  exit $E_BADARGS
+fi  
+
+
 # Definitions
 # User home directory
 USERHOMEDIR=`eval echo "~$USER"`
@@ -35,22 +58,9 @@ FJOBEXT=sh
 # Test mode switch
 TST=0
 
-usage="This script processes CellProfiler batch h5 file, creates jobs, and submits to SLURM queue 
-
-Usage:
-$(basename "$0") [-h] [-t]
-
-where:
-	-h | --help		Show this Help text.
-	-t | --test		Test mode: creates all intermediate files without submitting to a queue.
-	-c | --test		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).
-	-i | --test		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).
-	-m | --test		Path to TEMP directory (default /tmp/cp3).
-	-o | --test		Directory with CP output."
-	
 
 # read arguments
-TEMP=`getopt -o thc:i:m:o: --long test,help,cpbin:,cpinst:,tmpdir:outdir: -n 'slsubarrcp3.sh' -- "$@"`
+TEMP=`getopt -o thc:i:m:o: --long test,help,cpbin:,cpinst:,tmpdir:outdir: -n 'slsubarrcp2.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
