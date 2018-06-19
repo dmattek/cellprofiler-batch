@@ -13,10 +13,10 @@ $(basename "$0") -options H5-batch-file-from-CP\n
 Possible options:\n
 	-h | --help		Show this help text.\n
 	-t | --test		Test mode: creates all intermediate files without submitting to a queue.\n
-	-c | --test		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
-	-i | --test		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
-	-m | --test		Path to TEMP directory (default /tmp/cp3).\n
-	-o | --test		Directory with CP output.\n"
+	-c | --cpbin		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
+	-i | --cpinst		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
+	-m | --tmpdir		Path to TEMP directory (default /tmp/cp3).\n
+	-o | --outdir		Directory with CP output.\n"
 	
 E_BADARGS=85
 
@@ -35,7 +35,7 @@ USERHOMEDIR=`eval echo "~$USER"`
 CPINSTDIR=/opt/local/cellprofiler
 
 # Path to CellProfiler binary
-CPBINPATH=/opt/local/cellprofiler-batch/singularity/runcp2cont.sh
+CPBINPATH=/opt/local/bin/runcp2cont.sh
 
 # Name of the file with commands to execute
 FBATCHLIST=batchlist.txt

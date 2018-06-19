@@ -6,7 +6,9 @@
 
 
 usage="Error: insufficient arguments!\n
-This script processes CellProfiler batch h5 file, creates jobs, and submits to SLURM queue\n
+Processes CellProfiler batch h5 file, creates jobs, and submits to a SLURM queue.\n
+The CellProfiler binary used for image processing is specified with the parameter -c.\n
+The default CellProfiler version is 3.\n
 \n
 Usage:
 $(basename "$0") -options H5-batch-file-from-CP\n
@@ -14,10 +16,14 @@ $(basename "$0") -options H5-batch-file-from-CP\n
 Possible options:\n
 	-h | --help		Show this help text.\n
 	-t | --test		Test mode: creates all intermediate files without submitting to a queue.\n
-	-c | --cpbin		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
-	-i | --cpinst		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
-	-m | --tmpdir		Path to TEMP directory (default /tmp/cp3).\n
-	-o | --outdir		Directory with CP output.\n"
+	-c | --cpbin		Path to CellProfiler binary (default /opt/local/bin/runcp3cont.sh).\n
+	-i | --cpinst		Path to CellProfiler install directory (default /opt/local/cellprofiler).\n
+	-m | --tmpdir		Path to TEMP directory (default /tmp).\n
+	-o | --outdir		Directory with CP output.\n
+\n
+To submit jobs using CellProfiler 2 use:\n
+$(basename "$0") Batch_data.h5 -c /opt/local/bin/runcp2cont.sh
+"
 	
 E_BADARGS=85
 
@@ -28,6 +34,9 @@ then
 fi  
 
 # Definitions
+# Set initial value of the h5 file generated in the CreateBatchFile module of CP
+#FBATCHDATA=""
+
 # User home directory
 USERHOMEDIR=`eval echo "~$USER"`
 
@@ -69,7 +78,7 @@ eval set -- "$TEMP"
 while true ; do
 	case "$1" in
 	-t|--test) TST=1 ; shift ;;
-	-h|--help) echo "$usage"; exit ;;	
+	-h|--help) echo -e $usage; exit ;;	
 	-c|--cpbin)
             case "$2" in
                 "") shift 2 ;;
@@ -97,6 +106,14 @@ done
 
 # Name of the h5 file generated ith CreateBatchFile module of CP
 FBATCHDATA=$1
+echo $FBATCHDATA
+
+if [ ! -n "$1" ]
+then
+  echo -e $usage 
+  exit $E_BADARGS
+fi
+
 
 # CP plugins directory
 CPPLUGDIR=$CPINSTDIR/plugins
