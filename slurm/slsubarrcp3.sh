@@ -17,7 +17,9 @@ Possible options:\n
 	-c | --cpbin		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
 	-i | --cpinst		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
 	-m | --tmpdir		Path to TEMP directory (default /tmp/cp3).\n
-	-o | --outdir		Directory with CP output.\n"
+	-o | --outdir		Directory with CP output.\n
+	-r | --reqmem		Required memory per cpu; default 4GB.\n
+	-e | --reqtime		Required time per task, default 6h.\n"
 	
 E_BADARGS=85
 
@@ -49,6 +51,12 @@ TMPDIR=/tmp
 # Name of the directory to store CP output
 OUTDIR=output
 
+# Required memory per cpu; default 4GB
+REQMEMPERCPU=4096
+
+# Required time per task; default 6 hours
+REQTIME=6:00:00
+
 # Prefix for naming job files
 FJOBCORE="job_"
 
@@ -59,7 +67,7 @@ FJOBEXT=sh
 TST=0
 
 # read arguments
-TEMP=`getopt -o thc:i:m:o: --long test,help,cpbin:,cpinst:,tmpdir:outdir: -n 'slsubarrcp3.sh' -- "$@"`
+TEMP=`getopt -o thc:i:m:o:r:e: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime: -n 'slsubarrcp3.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
@@ -89,6 +97,16 @@ while true ; do
             case "$2" in
                 "") shift 2 ;;
                 *) OUTDIR=$2 ; shift 2 ;;
+            esac ;;
+	-r|--reqmem)
+            case "$2" in
+                "") shift 2 ;;
+                *) REQMEMPERCPU=$2 ; shift 2 ;;
+            esac ;;
+	-e|--reqtime)
+            case "$2" in
+                "") shift 2 ;;
+                *) REQTIME=$2 ; shift 2 ;;
             esac ;;
 	--) shift ; break ;;
      *) echo "Internal error!" ; exit 1 ;;
@@ -140,7 +158,9 @@ FARRAY=arrayjobs.sh
 
 echo "#!/bin/bash" > $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
-echo "#SBATCH --mem-per-cpu=4096" >> $FARRAY
+echo "#SBATCH --cpus-per-task=1" >> $FARRAY
+echo "#SBATCH --mem=$REQMEMPERCPU" >> $FARRAY
+echo "#SBATCH --time=$REQTIME" >> $FARRAY
 echo "#SBATCH -D $currDir" >> $FARRAY
 echo "#SBATCH --output=$JOBSDIR.out/slurm-%A_%a.out" >> $FARRAY
 echo "" >> $FARRAY

@@ -141,7 +141,8 @@ FARRAY=arrayjobs.sh
 
 echo "#!/bin/bash" > $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
-echo "#SBATCH --mem-per-cpu=4096" >> $FARRAY
+echo "#SBATCH --cpus-per-task=1" >> $FARRAY
+echo "#SBATCH --mem=4096" >> $FARRAY
 echo "#SBATCH -D $currDir" >> $FARRAY
 echo "#SBATCH --output=$JOBSDIR.out/slurm-%A_%a.out" >> $FARRAY
 echo "" >> $FARRAY
