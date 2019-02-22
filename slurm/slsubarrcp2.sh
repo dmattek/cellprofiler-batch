@@ -35,7 +35,7 @@ USERHOMEDIR=`eval echo "~$USER"`
 CPINSTDIR=/opt/local/cellprofiler
 
 # Path to CellProfiler binary
-CPBINPATH=/opt/local/bin/runcp2cont.sh
+CPBINPATH=/opt/local/bin/runcp2.sh
 
 # Name of the file with commands to execute
 FBATCHLIST=batchlist.txt
