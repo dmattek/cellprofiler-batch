@@ -5,27 +5,27 @@
 # The script should be execute IN the directory with h5 file
 
 
-usage="Error: insufficient arguments!\n
-This script processes CellProfiler batch h5 file, creates jobs, and submits to SLURM queue\n
-\n
-Usage:
-$(basename "$0") -options H5-batch-file-from-CP\n
-\n
-Possible options:\n
-	-h | --help		Show this help text.\n
-	-t | --test		Test mode: creates all intermediate files without submitting to a queue.\n
-	-c | --cpbin		Path to CellProfiler binary (default \$USERHOMEDIR/.local/bin/cellprofiler).\n
-	-i | --cpinst		Path to CellProfiler install directory (default \$USERHOMEDIR/CellProfiler).\n
-	-m | --tmpdir		Path to TEMP directory (default /tmp/cp3).\n
-	-o | --outdir		Directory with CP output.\n
-	-r | --reqmem		Required memory per cpu; default 4GB.\n
-	-e | --reqtime		Required time per task, default 6h.\n"
+usage="Error: insufficient arguments!
+This script processes CellProfiler batch h5 file, creates jobs, and submits to SLURM queue
+
+Usage: $(basename "$0") -options H5-batch-file-from-CP
+
+Possible options:
+	-h | --help		Show this help text.
+	-t | --test		Test mode: creates all intermediate files without submitting to a queue.
+	-c | --cpbin		Path to CellProfiler binary; default \$USERHOMEDIR/.local/bin/cellprofiler.
+	-i | --cpinst		Path to CellProfiler install directory; default \$USERHOMEDIR/CellProfiler.
+	-m | --tmpdir		Path to TEMP directory; default /tmp/cp3.
+	-o | --outdir		Directory with CP output; defalut output.
+	-r | --reqmem		Required memory per cpu; default 4GB.
+	-e | --reqtime		Required time per task; default 6h.
+	-p | --partition	Name of the slurm queue partition; default local."
 	
 E_BADARGS=85
 
 if [ ! -n "$1" ]
 then
-  echo -e $usage 
+  echo $usage 
   exit $E_BADARGS
 fi  
 
@@ -57,6 +57,9 @@ REQMEMPERCPU=4096
 # Required time per task; default 6 hours
 REQTIME=6:00:00
 
+# Name of the slurm partition to submit the job
+SLPART=local
+
 # Prefix for naming job files
 FJOBCORE="job_"
 
@@ -67,7 +70,7 @@ FJOBEXT=sh
 TST=0
 
 # read arguments
-TEMP=`getopt -o thc:i:m:o:r:e: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime: -n 'slsubarrcp3.sh' -- "$@"`
+TEMP=`getopt -o thc:i:m:o:r:e:p: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime:,partition: -n 'slsubarrcp3.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
@@ -108,6 +111,11 @@ while true ; do
                 "") shift 2 ;;
                 *) REQTIME=$2 ; shift 2 ;;
             esac ;;
+	-p|--partition)
+		case "$2" in
+			"") shitf 2 ;;
+			*) SLPART=$2 ; shift 2 ;;
+		esac ;;
 	--) shift ; break ;;
      *) echo "Internal error!" ; exit 1 ;;
     esac
@@ -163,6 +171,7 @@ echo "#SBATCH --mem=$REQMEMPERCPU" >> $FARRAY
 echo "#SBATCH --time=$REQTIME" >> $FARRAY
 echo "#SBATCH -D $currDir" >> $FARRAY
 echo "#SBATCH --output=$JOBSDIR.out/slurm-%A_%a.out" >> $FARRAY
+echo "#SBATCH --partition=$SLPART" >> $FARRAY
 echo "" >> $FARRAY
 echo "arrayfile=\`ls $JOBSDIR/ | awk -v line=\$SLURM_ARRAY_TASK_ID '{if (NR == line) print \$0}'\`" >> $FARRAY
 echo "$JOBSDIR/\$arrayfile" >> $FARRAY
