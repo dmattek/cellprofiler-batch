@@ -50,13 +50,13 @@ Possible options:
 	-o | --outdir		Directory with CP output; defalut output.
 	-r | --reqmem		Required memory per cpu; default 4GB.
 	-e | --reqtime		Required time per task; default 6h.
-	-p | --partition	Name of the slurm queue partition; default local."
+	-p | --partition	Name of the slurm queue partition; default all."
 	
 E_BADARGS=85
 
 if [ ! -n "$1" ]
 then
-  echo $usage 
+  echo "$usage"
   exit $E_BADARGS
 fi  
 
@@ -97,7 +97,7 @@ REQMEMPERCPU=4096
 REQTIME=6:00:00
 
 # Name of the slurm partition to submit the job
-SLPART=local
+SLPART=all
 
 # Prefix for naming job files
 FJOBCORE="job_"
@@ -222,6 +222,7 @@ echo "Number of tasks = $nFILES"
 
 # Write to array submission file
 echo "#!/bin/bash" > $FARRAY
+echo "#SBATCH --job-name=cp3" >> $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
 echo "#SBATCH --cpus-per-task=1" >> $FARRAY
 echo "#SBATCH --mem=$REQMEMPERCPU" >> $FARRAY
