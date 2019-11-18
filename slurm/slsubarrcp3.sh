@@ -44,8 +44,8 @@ Usage: $(basename "$0") -options H5-batch-file-from-CP
 Possible options:
 	-h | --help		Show this help text.
 	-t | --test		Test mode: creates all intermediate files without submitting to a queue.
-	-c | --cpbin		Path to CellProfiler binary; default \$USERHOMEDIR/.local/bin/cellprofiler.
-	-i | --cpinst		Path to CellProfiler install directory; default \$USERHOMEDIR/CellProfiler.
+	-c | --cpbin		Path to CellProfiler binary; default /opt/local/bin/runcp3.sh.
+	-i | --cpinst		Path to CellProfiler install directory; default /opt/local/cellprofiler.
 	-m | --tmpdir		Path to TEMP directory; default /tmp.
 	-o | --outdir		Directory with CP output; defalut output.
 	-r | --reqmem		Required memory per cpu; default 4GB.

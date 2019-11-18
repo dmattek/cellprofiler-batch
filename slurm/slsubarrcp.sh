@@ -37,31 +37,31 @@
 
 
 usage="Error: insufficient arguments!
-Processes CellProfiler batch h5 file, creates jobs, and submits to a SLURM queue.\n
-The CellProfiler binary used for image processing is specified with the parameter -c.\n
-The default CellProfiler version is 3.\n
-\n
+Processes CellProfiler batch h5 file, creates jobs, and submits to a SLURM queue.
+The CellProfiler binary used for image processing is specified with the parameter -c.
+The default CellProfiler version is 3.
+
 Usage: $(basename "$0") -options H5-batch-file-from-CP
-\n
+
 Possible options:
 	-h | --help		Show this help text.
 	-t | --test		Test mode: creates all intermediate files without submitting to a queue.
-	-c | --cpbin		Path to CellProfiler binary; default \$USERHOMEDIR/.local/bin/cellprofiler.
-	-i | --cpinst		Path to CellProfiler install directory; default \$USERHOMEDIR/CellProfiler.
+	-c | --cpbin		Path to CellProfiler binary; default /opt/local/bin/runcp3.sh.
+	-i | --cpinst		Path to CellProfiler install directory; default /opt/local/cellprofiler.
 	-m | --tmpdir		Path to TEMP directory; default /tmp.
 	-o | --outdir		Directory with CP output; defalut output.
 	-r | --reqmem		Required memory per cpu; default 4GB.
 	-e | --reqtime		Required time per task; default 6h.
-	-p | --partition	Name of the slurm queue partition; default local.\n
-\n
-To submit jobs using CellProfiler 2 use:\n
+	-p | --partition	Name of the slurm queue partition; default local.
+
+To submit jobs using CellProfiler 2 use:
 $(basename "$0") Batch_data.h5 -c /opt/local/bin/runcp2cont.sh"
 	
 E_BADARGS=85
 
 if [ ! -n "$1" ]
 then
-  echo $usage 
+  echo "$usage" 
   exit $E_BADARGS
 fi  
 
