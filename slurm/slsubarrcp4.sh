@@ -10,7 +10,7 @@
 #
 # Example usage:
 #  in the directory with Batch_data.h5
-#  slsubarrcp2.sh Batch_data.h5
+#  slsubarrcp3.sh Batch_data.h5
 # 
 # Jobs are generated based on h5 file (typically Batch_data.h5) created with CreateBatchFile module of CellProfiler
 # The script should be execute IN the directory with h5 file
@@ -21,7 +21,7 @@
 # This file is produced if CreateBatchFile module of CP is placed at the end of the pipeline.
 # Using a command-line option --get-batch-commands of CP, we can obtain a list of CP commands to execute
 # and process chunks of data. These commands are of the form:
-# /opt/local/bin/runcp2.sh -c -r -p Batch_data.h5 -f 1 -l 240
+# /opt/local/bin/runcp3.sh -c -r -p Batch_data.h5 -f 1 -l 240
 #
 # This script then takes these commands and place each of them in separate shell scripts.
 # Then, these scripts are submitted individually to SLURm queue as part of SLURM job array.
@@ -50,7 +50,7 @@ Possible options:
 	-o | --outdir		Directory with CP output; defalut output.
 	-r | --reqmem		Required memory per cpu; default 4GB.
 	-e | --reqtime		Required time per task; default 6h.
-	-p | --partition	Name of the slurm queue partition; default local."
+	-p | --partition	Name of the slurm queue partition; default all."
 	
 E_BADARGS=85
 
@@ -70,7 +70,7 @@ USERHOMEDIR=`eval echo "~$USER"`
 CPINSTDIR=/opt/local/cellprofiler
 
 # Path to CellProfiler binary
-CPBINPATH=/opt/local/bin/runcp2.sh
+CPBINPATH=/opt/local/bin/runcp424.sh
 
 # CP plugins directory
 CPPLUGDIR=$CPINSTDIR/plugins
@@ -109,7 +109,7 @@ FJOBEXT=sh
 TST=0
 
 # read arguments
-TEMP=`getopt -o thc:i:m:o:r:e:p: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime:,partition: -n 'slsubarrcp2.sh' -- "$@"`
+TEMP=`getopt -o thc:i:m:o:r:e:p: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime:,partition: -n 'slsubarrcp4.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # Extract options and their arguments into variables.
@@ -172,8 +172,8 @@ FBATCHDATA=$1
 # to create a file $FBATCHLIST (e.g. batchlist.txt) with commands to execute.
 # Each row of the FBATCHLIST file contains a row with the CP command to process a chunk of images, e.g. 
 #
-# /opt/local/bin/runcp2.sh -c -r -p Batch_data.h5 -f 1 -l 240
-# /opt/local/bin/runcp2.sh -c -r -p Batch_data.h5 -f 241 -l 480
+# /opt/local/bin/runcp3.sh -c -r -p Batch_data.h5 -f 1 -l 240
+# /opt/local/bin/runcp3.sh -c -r -p Batch_data.h5 -f 241 -l 480
 # etc.
 
 $CPBINPATH --plugins-directory $CPPLUGDIR --get-batch-commands $FBATCHDATA |sed -e "s|CellProfiler|${CPBINPATH}|" > $FBATCHLIST
@@ -222,6 +222,7 @@ echo "Number of tasks = $nFILES"
 
 # Write to array submission file
 echo "#!/bin/bash" > $FARRAY
+echo "#SBATCH --job-name=cp3" >> $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
 echo "#SBATCH --cpus-per-task=1" >> $FARRAY
 echo "#SBATCH --mem=$REQMEMPERCPU" >> $FARRAY
