@@ -44,7 +44,7 @@ Usage: $(basename "$0") -options H5-batch-file-from-CP
 Possible options:
 	-h | --help		Show this help text.
 	-t | --test		Test mode: creates all intermediate files without submitting to a queue.
-	-c | --cpbin		Path to CellProfiler binary; default /opt/local/bin/runcp3.sh.
+	-c | --cpbin		Path to CellProfiler binary; default /opt/local/bin/runcp426.sh.
 	-i | --cpinst		Path to CellProfiler install directory; default /opt/local/cellprofiler.
 	-m | --tmpdir		Path to TEMP directory; default /tmp.
 	-o | --outdir		Directory with CP output; defalut output.
@@ -70,7 +70,7 @@ USERHOMEDIR=`eval echo "~$USER"`
 CPINSTDIR=/opt/local/cellprofiler
 
 # Path to CellProfiler binary
-CPBINPATH=/opt/local/bin/runcp424.sh
+CPBINPATH=/opt/local/bin/runcp426.sh
 
 # CP plugins directory
 CPPLUGDIR=$CPINSTDIR/plugins
@@ -109,7 +109,7 @@ FJOBEXT=sh
 TST=0
 
 # read arguments
-TEMP=`getopt -o thc:i:m:o:r:e:p: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime:,partition: -n 'slsubarrcp4.sh' -- "$@"`
+TEMP=`getopt -o thc:i:m:o:r:e:p: --long test,help,cpbin:,cpinst:,tmpdir:,outdir:,reqmem:,reqtime:,partition: -n 'slsubarrcp3.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # Extract options and their arguments into variables.
@@ -222,7 +222,7 @@ echo "Number of tasks = $nFILES"
 
 # Write to array submission file
 echo "#!/bin/bash" > $FARRAY
-echo "#SBATCH --job-name=cp3" >> $FARRAY
+echo "#SBATCH --job-name=cp4" >> $FARRAY
 echo "#SBATCH --array=1-$nFILES" >> $FARRAY
 echo "#SBATCH --cpus-per-task=1" >> $FARRAY
 echo "#SBATCH --mem=$REQMEMPERCPU" >> $FARRAY
